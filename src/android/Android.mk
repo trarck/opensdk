@@ -2,9 +2,9 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := OpensdkStatic
+LOCAL_MODULE := opensdk_static
 
-LOCAL_MODULE_FILENAME := libOpensdkStatic
+LOCAL_MODULE_FILENAME := libopensdk
 
 LOCAL_SRC_FILES :=\
 	PluginFactory.cpp \
