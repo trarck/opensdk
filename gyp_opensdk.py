@@ -13,10 +13,10 @@ except ImportError:
 
 CC = os.environ.get('CC', 'cc')
 script_dir = os.path.dirname(__file__)
-yh_root = os.path.normpath(script_dir)
-output_dir = os.path.join(os.path.abspath(yh_root), 'out')
+opensdk_root = os.path.normpath(script_dir)
+output_dir = os.path.join(os.path.abspath(opensdk_root), 'out')
 
-sys.path.insert(0, os.path.join(yh_root, 'build', 'gyp', 'pylib'))
+sys.path.insert(0, os.path.join(opensdk_root, 'build', 'gyp', 'pylib'))
 try:
   import gyp
 except ImportError:
@@ -48,16 +48,16 @@ if __name__ == '__main__':
   # On msvs it will crash if it gets an absolute path.
   # On Mac/make it will crash if it doesn't get an absolute path.
   if sys.platform == 'win32':
-    args.append(os.path.join(yh_root, 'yh.gyp'))
-    common_fn  = os.path.join(yh_root, 'common.gypi')
-    options_fn = os.path.join(yh_root, 'options.gypi')
+    args.append(os.path.join(opensdk_root, 'yh.gyp'))
+    common_fn  = os.path.join(opensdk_root, 'common.gypi')
+    options_fn = os.path.join(opensdk_root, 'options.gypi')
     # we force vs 2010 over 2008 which would otherwise be the default for gyp
     if not os.environ.get('GYP_MSVS_VERSION'):
       os.environ['GYP_MSVS_VERSION'] = '2015'
   else:
-    args.append(os.path.join(os.path.abspath(yh_root), 'yh.gyp'))
-    common_fn  = os.path.join(os.path.abspath(yh_root), 'common.gypi')
-    options_fn = os.path.join(os.path.abspath(yh_root), 'options.gypi')
+    args.append(os.path.join(os.path.abspath(opensdk_root), 'yh.gyp'))
+    common_fn  = os.path.join(os.path.abspath(opensdk_root), 'common.gypi')
+    options_fn = os.path.join(os.path.abspath(opensdk_root), 'options.gypi')
 
   if os.path.exists(common_fn):
     args.extend(['-I', common_fn])
@@ -65,7 +65,7 @@ if __name__ == '__main__':
   if os.path.exists(options_fn):
     args.extend(['-I', options_fn])
 
-  args.append('--depth=' + yh_root)
+  args.append('--depth=' + opensdk_root)
 
   # There's a bug with windows which doesn't allow this feature.
   if sys.platform != 'win32':
