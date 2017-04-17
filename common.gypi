@@ -154,9 +154,6 @@
             'cflags': [ '-pthread' ],
             'ldflags': [ '-pthread' ],
           }],
-          [ 'visibility=="hidden"', {
-            'cflags': [ '-fvisibility=hidden' ],
-          }],
         ],
       }],
       ['OS=="mac"', {

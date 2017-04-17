@@ -48,14 +48,14 @@ if __name__ == '__main__':
   # On msvs it will crash if it gets an absolute path.
   # On Mac/make it will crash if it doesn't get an absolute path.
   if sys.platform == 'win32':
-    args.append(os.path.join(opensdk_root, 'yh.gyp'))
+    args.append(os.path.join(opensdk_root, 'opensdk.gyp'))
     common_fn  = os.path.join(opensdk_root, 'common.gypi')
     options_fn = os.path.join(opensdk_root, 'options.gypi')
     # we force vs 2010 over 2008 which would otherwise be the default for gyp
     if not os.environ.get('GYP_MSVS_VERSION'):
       os.environ['GYP_MSVS_VERSION'] = '2015'
   else:
-    args.append(os.path.join(os.path.abspath(opensdk_root), 'yh.gyp'))
+    args.append(os.path.join(os.path.abspath(opensdk_root), 'opensdk.gyp'))
     common_fn  = os.path.join(os.path.abspath(opensdk_root), 'common.gypi')
     options_fn = os.path.join(os.path.abspath(opensdk_root), 'options.gypi')
 
@@ -81,8 +81,8 @@ if __name__ == '__main__':
   if not any(a.startswith('-Dtarget_arch=') for a in args):
     args.append('-Dtarget_arch=%s' % host_arch())
 
-  if not any(a.startswith('-Dyh_library=') for a in args):
-    args.append('-Dyh_library=static_library')
+  if not any(a.startswith('-Dopensdk_library=') for a in args):
+    args.append('-Dopensdk_library=static_library')
 
   # Some platforms (OpenBSD for example) don't have multiprocessing.synchronize
   # so gyp must be run with --no-parallel
