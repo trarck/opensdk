@@ -34,18 +34,12 @@
 		<link>
 			<name>android</name>
 			<type>2</type>
-			<locationURI>copy_PARENT/platform/android</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC</locationURI>
 		</link>
 		<link>
 			<name>include</name>
 			<type>2</type>
-			<locationURI>copy_PARENT/include</locationURI>
+			<locationURI>PARENT-2-PROJECT_LOC/include</locationURI>
 		</link>
 	</linkedResources>
-	<variableList>
-		<variable>
-			<name>copy_PARENT</name>
-			<value>$%7BPARENT-3-PROJECT_LOC%7D/Develops/cocos/cocos2d-x/projects/opensdk</value>
-		</variable>
-	</variableList>
 </projectDescription>
