@@ -8,7 +8,7 @@ namespace opensdk {
 
 #define JAVAVM    opensdk::PluginJniHelper::getJavaVM()
 
-void PluginUtils::initPluginWrapper(android_app* app)
+/* void PluginUtils::initPluginWrapper(android_app* app)
 {
     PluginJniMethodInfo t;
     if (! PluginJniHelper::getStaticMethodInfo(t
@@ -22,7 +22,7 @@ void PluginUtils::initPluginWrapper(android_app* app)
 
     t.env->CallStaticVoidMethod(t.classID, t.methodID, app->activity->clazz);
     t.env->DeleteLocalRef(t.classID);
-}
+} */
 
 jobject PluginUtils::createJavaMapObject(std::map<std::string, std::string>* paramMap)
 {

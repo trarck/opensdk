@@ -7,7 +7,7 @@
 #include <list>
 #include "PluginParam.h"
 #include "PluginJniMacros.h"
-#include <android_native_app_glue.h>
+//#include <android_native_app_glue.h>
 
 namespace opensdk {
 
@@ -15,7 +15,7 @@ class PluginProtocol;
 class PluginUtils
 {
 public:
-    static void initPluginWrapper(android_app* app);
+    // static void initPluginWrapper(android_app* app);
     static void outputLog(const char* logTag, const char* pFormat, ...);
     
     static jobject createJavaMapObject(std::map<std::string, std::string>* paramMap);
