@@ -378,7 +378,7 @@ VS_VERSION_MAP = {
 }
 
 def get_msbuild_path(vs_version):
-    if cocos.os_is_win32():
+    if os_is_win32():
         import _winreg
     else:
         return None
@@ -398,7 +398,7 @@ def get_msbuild_path(vs_version):
 
     # If the system is 64bit, find VS in both 32bit & 64bit registry
     # If the system is 32bit, only find VS in 32bit registry
-    if cocos.os_is_32bit_windows():
+    if os_is_32bit_windows():
         reg_flag_list = [ _winreg.KEY_WOW64_32KEY ]
     else:
         reg_flag_list = [ _winreg.KEY_WOW64_64KEY, _winreg.KEY_WOW64_32KEY ]
@@ -427,7 +427,7 @@ def get_msbuild_path(vs_version):
     return msbuild_path
 
 def get_devenv_path(vs_version):
-    if cocos.os_is_win32():
+    if os_is_win32():
         import _winreg
     else:
         return None
@@ -447,7 +447,7 @@ def get_devenv_path(vs_version):
 
     # If the system is 64bit, find VS in both 32bit & 64bit registry
     # If the system is 32bit, only find VS in 32bit registry
-    if cocos.os_is_32bit_windows():
+    if os_is_32bit_windows():
         reg_flag_list = [ _winreg.KEY_WOW64_32KEY ]
     else:
         reg_flag_list = [ _winreg.KEY_WOW64_64KEY, _winreg.KEY_WOW64_32KEY ]
@@ -483,14 +483,14 @@ def get_devenv_path(vs_version):
 def get_vs_versions():
     # Get the VS versions
     ret = []
-    if cocos.os_is_win32():
+    if os_is_win32():
         import _winreg
     else:
         return ret
 
     # If the system is 64bit, find VS in both 32bit & 64bit registry
     # If the system is 32bit, only find VS in 32bit registry
-    if cocos.os_is_32bit_windows():
+    if os_is_32bit_windows():
         reg_flag_list = [ _winreg.KEY_WOW64_32KEY ]
     else:
         reg_flag_list = [ _winreg.KEY_WOW64_64KEY, _winreg.KEY_WOW64_32KEY ]
@@ -582,3 +582,21 @@ def get_newest_devenv(min_ver=None):
         need_upgrade = False
 
     return (need_upgrade, find_path)
+
+def get_toolchain_version(ndk_root):
+    # use the folder name in toolchains to check get gcc version
+    toolchains_path = os.path.join(ndk_root, 'toolchains')
+    dir_names = os.listdir(toolchains_path)
+    versions=[]
+    versionCheckFlag={}
+    verReg = re.compile(r".*-(\d\.\d).*")
+    for dir_name in dir_names:
+        verMatch=verReg.match(dir_name)
+        if verMatch :
+            ver=verMatch.group(1)
+            if not versionCheckFlag.has_key(ver) :
+                versionCheckFlag[ver]=True
+                versions.append(ver)
+        
+    versions.sort()
+    return versions[-1]

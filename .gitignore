@@ -83,3 +83,4 @@ Device-Release/
 /deps/gtest/libraries
 /build/gyp
 /build/proj.win32/yh.VC.opendb
+/publish

@@ -1,0 +1,1 @@
+build\build.py --proj-dir ..\build\proj.android

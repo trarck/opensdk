@@ -41,7 +41,8 @@ class AndroidBuilder(object):
         self._no_res = no_res
         self._project = proj_obj
         self.use_studio = use_studio
-
+        self.ndk_module_paths = []
+        
         # check environment variable
         if self.use_studio:
             self.ant_root = None
@@ -59,6 +60,8 @@ class AndroidBuilder(object):
 
         if exts is not None and exts.has_key('NDK_ROOT'):
             self.ndk_root = exts['NDK_ROOT']        
+        else:
+            self.ndk_root = None
             
         self._parse_cfg()
 
@@ -237,8 +240,9 @@ class AndroidBuilder(object):
         ndk_path = utils.CMDRunner.convert_path_to_cmd(os.path.join(ndk_root, "ndk-build"))
 
         module_paths = []
-        for cfg_path in self.ndk_module_paths:
-            module_paths.append(os.path.join(self.app_android_root, cfg_path))
+        if self.ndk_module_paths is not None:
+            for cfg_path in self.ndk_module_paths:
+                module_paths.append(os.path.join(self.app_android_root, cfg_path))
 
         # delete template static and dynamic files
         obj_local_dir = os.path.join(ndk_work_dir, "obj", "local")
