@@ -3,6 +3,7 @@
 #include <map>
 
 #define MAX_LOG_LEN			256
+#define PLUGIN_KEY_BUFF_SIZE 128
 
 namespace opensdk {
 
@@ -120,10 +121,10 @@ PluginJavaData* PluginUtils::getPluginJavaData(PluginProtocol* pKeyObj)
     return ret;
 }
 
-PluginProtocol* PluginUtils::getPluginPtr(std::string className)
+PluginProtocol* PluginUtils::getPluginPtr(std::string& key)
 {
 	PluginProtocol* ret = NULL;
-	JObjPluginMapIter it = s_JObjPluginMap.find(className);
+	JObjPluginMapIter it = s_JObjPluginMap.find(key);
 	if (it != s_JObjPluginMap.end()) {
 		ret = it->second;
 	}
@@ -131,14 +132,16 @@ PluginProtocol* PluginUtils::getPluginPtr(std::string className)
 	return ret;
 }
 
-void PluginUtils::setPluginJavaData(PluginProtocol* pKeyObj, PluginJavaData* pData)
+void PluginUtils::setPluginJavaData(PluginProtocol* pKeyObj, PluginJavaData* pData,int pluginType)
 {
-    erasePluginJavaData(pKeyObj);
+    erasePluginJavaData(pKeyObj,pluginType);
     s_PluginObjMap.insert(std::pair<PluginProtocol*, PluginJavaData*>(pKeyObj, pData));
-    s_JObjPluginMap.insert(std::pair<std::string, PluginProtocol*>(pData->jclassName, pKeyObj));
+    char key[PLUGIN_KEY_BUFF_SIZE]={0};
+    sprintf(key,"%s%d",pData->jclassName,pluginType);
+    s_JObjPluginMap.insert(std::pair<std::string, PluginProtocol*>(key, pKeyObj));
 }
 
-void PluginUtils::erasePluginJavaData(PluginProtocol* pKeyObj)
+void PluginUtils::erasePluginJavaData(PluginProtocol* pKeyObj,int pluginType)
 {
     ObjMapIter it = s_PluginObjMap.find(pKeyObj);
     if (it != s_PluginObjMap.end()) {
@@ -146,8 +149,9 @@ void PluginUtils::erasePluginJavaData(PluginProtocol* pKeyObj)
         if (pData != NULL)
         {
             jobject jobj = pData->jobj;
-
-            JObjPluginMapIter pluginIt = s_JObjPluginMap.find(pData->jclassName);
+            char key[PLUGIN_KEY_BUFF_SIZE]={0};
+            sprintf(key,"%s%d",pData->jclassName,pluginType);
+            JObjPluginMapIter pluginIt = s_JObjPluginMap.find(key);
             if (pluginIt != s_JObjPluginMap.end())
             {
             	s_JObjPluginMap.erase(pluginIt);
@@ -159,6 +163,29 @@ void PluginUtils::erasePluginJavaData(PluginProtocol* pKeyObj)
             delete pData;
         }
         s_PluginObjMap.erase(it);
+    }
+}
+
+void erasePluginJavaData(std::string& key)
+{
+    JObjPluginMapIter pluginIt = s_JObjPluginMap.find(key);
+    if (pluginIt != s_JObjPluginMap.end())
+    {
+        PluginProtocol* pKeyObj=pluginIt->second;
+        ObjMapIter it = s_PluginObjMap.find(pKeyObj);
+        if (it != s_PluginObjMap.end()) {
+            PluginJavaData* pData = it->second;
+            if (pData != NULL)
+            {
+                jobject jobj = pData->jobj;
+                JNIEnv* pEnv = getEnv();
+                outputLog("PluginUtils", "Delete global reference.");
+                pEnv->DeleteGlobalRef(jobj);
+                delete pData;
+            }
+            s_PluginObjMap.erase(it);
+        }
+        s_JObjPluginMap.erase(pluginIt);
     }
 }
 

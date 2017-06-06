@@ -26,9 +26,10 @@ public:
 
     static PluginJavaData* getPluginJavaData(PluginProtocol* pKeyObj);
     static void setPluginJavaData(PluginProtocol* pKeyObj, PluginJavaData* pData,int pluginType);
-    static void erasePluginJavaData(PluginProtocol* pKeyObj);
+    static void erasePluginJavaData(PluginProtocol* pKeyObj,int pluginType);
+    static void erasePluginJavaData(std::string& key);
 
-    static PluginProtocol* getPluginPtr(std::string className);
+    static PluginProtocol* getPluginPtr(std::string& key);
 
     static jobject getJObjFromParam(PluginParam* param);
 

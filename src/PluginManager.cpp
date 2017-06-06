@@ -1,6 +1,8 @@
 ﻿#include "PluginManager.h"
 #include "PluginFactory.h"
 
+#define PLUGIN_KEY_BUFF_SIZE 128
+
 namespace opensdk {
 
 static PluginManager* s_pPluginManager = NULL;
@@ -45,9 +47,13 @@ void PluginManager::end()
 PluginProtocol* PluginManager::loadPlugin(const char* name,int pluginType)
 {
     PluginProtocol* pRet = NULL;
+    
     do {
         if (name == NULL || strlen(name) == 0) break;
-        std::map<std::string, PluginProtocol*>::iterator it = _pluginsMap.find(name);
+        
+        char key[PLUGIN_KEY_BUFF_SIZE]={0};
+        sprintf(key,"%s%d",name,pluginType);
+        std::map<std::string, PluginProtocol*>::iterator it = _pluginsMap.find(key);
         if (it != _pluginsMap.end())
         {
             if (it->second == NULL) {
@@ -57,18 +63,20 @@ PluginProtocol* PluginManager::loadPlugin(const char* name,int pluginType)
         } else
         {
         	pRet = PluginFactory::getInstance()->createPlugin(name,pluginType);
-        	_pluginsMap[name] = pRet;
+        	_pluginsMap[key] = pRet;
         }
     } while (false);
 
     return pRet;
 }
 
-void PluginManager::unloadPlugin(const char* name)
+void PluginManager::unloadPlugin(const char* name,int pluginType)
 {
     do {
         if (name == NULL || strlen(name) == 0) break;
-        std::map<std::string, PluginProtocol*>::iterator it = _pluginsMap.find(name);
+        char key[PLUGIN_KEY_BUFF_SIZE]={0};
+        sprintf(key,"%s%d",name,pluginType);
+        std::map<std::string, PluginProtocol*>::iterator it = _pluginsMap.find(key);
 		if (it != _pluginsMap.end())
         {
             if (it->second != NULL) {

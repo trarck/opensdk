@@ -20,7 +20,7 @@ public:
     PluginProtocol* loadPlugin(const char* name,int pluginType=0);
     
     /** unload the plugin by name */
-    void unloadPlugin(const char* name);
+    void unloadPlugin(const char* name,int pluginType = 0);
 
 private:
     PluginManager(void);
