@@ -21,11 +21,11 @@ public:
     static jobject createJavaMapObject(std::map<std::string, std::string>* paramMap);
     static jobject createJavaListObject(std::list<std::string>* paramList);
     
-    static void initJavaPlugin(PluginProtocol* pPlugin, jobject jObj, const char* className);
+    static void initJavaPlugin(PluginProtocol* pPlugin, jobject jObj, const char* className,int pluginType);
     static JNIEnv* getEnv();
 
     static PluginJavaData* getPluginJavaData(PluginProtocol* pKeyObj);
-    static void setPluginJavaData(PluginProtocol* pKeyObj, PluginJavaData* pData);
+    static void setPluginJavaData(PluginProtocol* pKeyObj, PluginJavaData* pData,int pluginType);
     static void erasePluginJavaData(PluginProtocol* pKeyObj);
 
     static PluginProtocol* getPluginPtr(std::string className);

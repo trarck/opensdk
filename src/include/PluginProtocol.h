@@ -70,6 +70,7 @@ public:
     virtual float callFloatFuncWithParam(const char* funcName, PluginParam* param, ...);
     virtual float callFloatFuncWithParam(const char* funcName, std::vector<PluginParam*> params);
 
+    virtual bool isFunctionSupported(std::string functionName);
 };
 
 } //namespace opensdk {

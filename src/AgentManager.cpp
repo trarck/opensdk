@@ -3,13 +3,12 @@
 #include "AgentManager.h"
 #include "PluginManager.h"
 #include "PluginFactory.h"
-#include "PluginJniHelper.h"
 #include "PluginUtils.h"
-#include <android/log.h>
+#include "platform/Log.h"
 
 namespace opensdk {
 
-static AgentManager* s_AgentManager = NULL;
+static AgentManager* AgentManager::s_agentManagerInstance = NULL;
 
 static void split(const std::string& s, const std::string& delim,std::vector< std::string >* ret)
 {
@@ -32,24 +31,24 @@ AgentManager::AgentManager():_pAnalytics(NULL), _pUser(NULL), _pShare(NULL), _pS
 
 AgentManager::~AgentManager()
 {
-	this->unloadAllPlugin();
+	this->unloadAllPlugins();
 }
 
-AgentManager* AgentManager::getInstance()
-{
-	if(NULL == s_AgentManager)
-	{
-		s_AgentManager = new (std::nothrow) AgentManager();
-	}
-	return s_AgentManager;
-}
+// AgentManager* AgentManager::getInstance()
+// {
+	// if(NULL == s_agentManagerInstance)
+	// {
+		// s_agentManagerInstance = new (std::nothrow) AgentManager();
+	// }
+	// return s_agentManagerInstance;
+// }
 
-void AgentManager::destroyInstance()
+void AgentManager::end()
 {
-	if(s_AgentManager)
+	if(s_agentManagerInstance)
 	{
-		delete s_AgentManager;
-		s_AgentManager = NULL;
+		delete s_agentManagerInstance;
+		s_agentManagerInstance = NULL;
 	}
 }
 
@@ -60,25 +59,25 @@ void AgentManager::init()
 
 void AgentManager::init(const std::string& appKey,const std::string& appSecret,const std::string& privateKey,const std::string& oauthLoginServer)
 {
-    PluginJniMethodInfo t;
-    if (! PluginJniHelper::getStaticMethodInfo(t
-        , "com/opensdk/framework/Wrapper"
-        , "setAppParam"
-        , "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V"))
-    {
-		jstring paramAppKey = t.env->NewStringUTF(appKey.c_str());
-		jstring paramAppSecret = t.env->NewStringUTF(appSecret.c_str());
-		jstring paramPrivateKey = t.env->NewStringUTF(privateKey.c_str());
-		jstring paramOauthLoginServer = t.env->NewStringUTF(oauthLoginServer.c_str());
+    // PluginJniMethodInfo t;
+    // if (! PluginJniHelper::getStaticMethodInfo(t
+        // , "com/opensdk/framework/Wrapper"
+        // , "setAppParam"
+        // , "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V"))
+    // {
+		// jstring paramAppKey = t.env->NewStringUTF(appKey.c_str());
+		// jstring paramAppSecret = t.env->NewStringUTF(appSecret.c_str());
+		// jstring paramPrivateKey = t.env->NewStringUTF(privateKey.c_str());
+		// jstring paramOauthLoginServer = t.env->NewStringUTF(oauthLoginServer.c_str());
 		
-	    t.env->CallStaticVoidMethod(t.classID, t.methodID,paramAppKey,paramAppSecret,paramPrivateKey,paramOauthLoginServer);
-		t.env->DeleteLocalRef(paramAppKey);
-		t.env->DeleteLocalRef(paramAppSecret);
-		t.env->DeleteLocalRef(paramPrivateKey);
-		t.env->DeleteLocalRef(paramOauthLoginServer);
-    }
+	    // t.env->CallStaticVoidMethod(t.classID, t.methodID,paramAppKey,paramAppSecret,paramPrivateKey,paramOauthLoginServer);
+		// t.env->DeleteLocalRef(paramAppKey);
+		// t.env->DeleteLocalRef(paramAppSecret);
+		// t.env->DeleteLocalRef(paramPrivateKey);
+		// t.env->DeleteLocalRef(paramOauthLoginServer);
+    // }
 
-    t.env->DeleteLocalRef(t.classID);
+    // t.env->DeleteLocalRef(t.classID);
 }
 
 void AgentManager::loadPluginsFromConfig(const std::map<std::string, std::string>& conf)
@@ -186,20 +185,20 @@ void AgentManager::loadPluginsFromConfigAutoType(const std::map<std::string, std
 	}
 }
     
-void AgentManager::loadAllPlugin()
+void AgentManager::loadAllPlugins()
 {
-	unloadAllPlugin();
+	unloadAllPlugins();
 	
     std::map<std::string,std::string> conf = getPluginConfigure();
     if(!conf.empty()){
         loadPluginsFromConfig(conf);
     }else{
-		PluginUtils::outputLog("AgentManager", "no config use debug mode");
+		OPENSDK_WARN("AgentManager", "no config use debug mode");
         setDebugMode(true);
     }
 }
 
-void AgentManager::unloadAllPlugin()
+void AgentManager::unloadAllPlugins()
 {
 	PluginManager* pluginManager=PluginManager::getInstance();
  
@@ -245,18 +244,18 @@ std::string AgentManager::getChannelId()
 {
 	std::string ret = "";
 	
-    PluginJniMethodInfo t;
-    if (! PluginJniHelper::getStaticMethodInfo(t
-        , "com/opensdk/framework/Wrapper"
-        , "getChannelId"
-        , "()Ljava/lang/String;"))
-    {
-	    jstring strRet = (jstring) t.env->CallStaticObjectMethod(t.classID, t.methodID);
-	    ret = PluginJniHelper::jstring2string(strRet);
-		t.env->DeleteLocalRef(strRet);
-    }
+    // PluginJniMethodInfo t;
+    // if (! PluginJniHelper::getStaticMethodInfo(t
+        // , "com/opensdk/framework/Wrapper"
+        // , "getChannelId"
+        // , "()Ljava/lang/String;"))
+    // {
+	    // jstring strRet = (jstring) t.env->CallStaticObjectMethod(t.classID, t.methodID);
+	    // ret = PluginJniHelper::jstring2string(strRet);
+		// t.env->DeleteLocalRef(strRet);
+    // }
 
-    t.env->DeleteLocalRef(t.classID);
+    // t.env->DeleteLocalRef(t.classID);
 	
 	return ret;
 }
@@ -265,18 +264,18 @@ std::string AgentManager::getCustomParam()
 {
 	std::string ret = "";
 	
-    PluginJniMethodInfo t;
-    if (! PluginJniHelper::getStaticMethodInfo(t
-        , "com/opensdk/framework/Wrapper"
-        , "getCustomParam"
-        , "()Ljava/lang/String;"))
-    {
-	    jstring strRet = (jstring) t.env->CallStaticObjectMethod(t.classID, t.methodID);
-	    ret = PluginJniHelper::jstring2string(strRet);
-		t.env->DeleteLocalRef(strRet);
-    }
+    // PluginJniMethodInfo t;
+    // if (! PluginJniHelper::getStaticMethodInfo(t
+        // , "com/opensdk/framework/Wrapper"
+        // , "getCustomParam"
+        // , "()Ljava/lang/String;"))
+    // {
+	    // jstring strRet = (jstring) t.env->CallStaticObjectMethod(t.classID, t.methodID);
+	    // ret = PluginJniHelper::jstring2string(strRet);
+		// t.env->DeleteLocalRef(strRet);
+    // }
 
-    t.env->DeleteLocalRef(t.classID);
+    // t.env->DeleteLocalRef(t.classID);
 	
 	return ret;
 }
@@ -285,17 +284,17 @@ std::map<std::string, std::string> AgentManager::getPluginConfigure()
 {
 	std::map<std::string, std::string> configure;
 
-	PluginJniMethodInfo t;
+	// PluginJniMethodInfo t;
 
-	if(PluginJniHelper::getStaticMethodInfo(t, "com/opensdk/framework/Wrapper", "getPluginConfigure", "()Ljava/util/Hashtable;"))
-	{
-		jobject jhashtable = t.env->CallStaticObjectMethod(t.classID, t.methodID);
+	// if(PluginJniHelper::getStaticMethodInfo(t, "com/opensdk/framework/Wrapper", "getPluginConfigure", "()Ljava/util/Hashtable;"))
+	// {
+		// jobject jhashtable = t.env->CallStaticObjectMethod(t.classID, t.methodID);
 
-		configure=PluginJniHelper::convertJavaHashTable2Map(jhashtable);
+		// configure=PluginJniHelper::convertJavaHashTable2Map(jhashtable);
 	
-		t.env->DeleteLocalRef(jhashtable);
-	}
-	t.env->DeleteLocalRef(t.classID);
+		// t.env->DeleteLocalRef(jhashtable);
+	// }
+	// t.env->DeleteLocalRef(t.classID);
 	return configure;
 }
 
@@ -303,19 +302,19 @@ std::map<std::string, std::string> AgentManager::getPluginConfigureFromFile(cons
 {
 	std::map<std::string, std::string> configure;
 
-	PluginJniMethodInfo t;
+	// PluginJniMethodInfo t;
 
-	if(PluginJniHelper::getStaticMethodInfo(t, "com/opensdk/framework/Wrapper", "getPluginConfigFromFile", "(Ljava/lang/String;)Ljava/util/Hashtable;"))
-	{
-		jstring paramFile = t.env->NewStringUTF(file.c_str());
-		jobject jhashtable = t.env->CallStaticObjectMethod(t.classID, t.methodID,paramFile);
+	// if(PluginJniHelper::getStaticMethodInfo(t, "com/opensdk/framework/Wrapper", "getPluginConfigFromFile", "(Ljava/lang/String;)Ljava/util/Hashtable;"))
+	// {
+		// jstring paramFile = t.env->NewStringUTF(file.c_str());
+		// jobject jhashtable = t.env->CallStaticObjectMethod(t.classID, t.methodID,paramFile);
 
-		configure=PluginJniHelper::convertJavaHashTable2Map(jhashtable);
+		// configure=PluginJniHelper::convertJavaHashTable2Map(jhashtable);
 	
-		t.env->DeleteLocalRef(paramFile);
-		t.env->DeleteLocalRef(jhashtable);
-	}
-	t.env->DeleteLocalRef(t.classID);
+		// t.env->DeleteLocalRef(paramFile);
+		// t.env->DeleteLocalRef(jhashtable);
+	// }
+	// t.env->DeleteLocalRef(t.classID);
 	return configure;
 }
 
@@ -333,6 +332,15 @@ void AgentManager::setDebugMode(bool flag)
 		_pluginsIAPMap["IAPDebug"]=pIAP;
 	}
 }
+
+std::string AgentManager::getSupportPlugin()
+{
+    return ""
+}
+
+void AgentManager::release()
+{
     
+}
     
 }

@@ -21,7 +21,7 @@ public:
 	
 	static AgentManager* getInstance();
 	
-	static void destroyInstance();
+	static void end();
 	
 	virtual void init();
 	
@@ -34,9 +34,9 @@ public:
      */
     virtual void loadPluginsFromConfigAutoType(const std::map<std::string, std::string>& conf);
 	
-	virtual void loadAllPlugin();
+	virtual void loadAllPlugins();
 	
-	virtual void unloadAllPlugin();
+	virtual void unloadAllPlugins();
 	
    /**
     @brief Get Analytics plugin
@@ -91,13 +91,13 @@ public:
     @brief Get channel ID
     @return  return value is channel ID.
     */
-   std::string getChannelId();
+   virtual std::string getChannelId();
 
    /**
     @brief Get custom param
     @return  return value is custom param for channel.
     */
-   std::string getCustomParam();
+   virtual std::string getCustomParam();
 
    /**
    @Title: setIsAnaylticsEnabled
@@ -115,12 +115,14 @@ public:
    bool isAnaylticsEnabled(){return bIsAnaylticsEnabled;};
 
 protected:
-	AgentManager();
-	std::map<std::string, std::string> getPluginConfigure();
-	std::map<std::string, std::string> getPluginConfigureFromFile(const std::string& file);
-
-	void setDebugMode(bool flag);
-
+    AgentManager();
+    
+    virtual void setDebugMode(bool flag);
+	virtual std::map<std::string, std::string> getPluginConfigure();
+	virtual std::map<std::string, std::string> getPluginConfigureFromFile(const std::string& file);
+    virtual std::string getSupportPlugin();
+    virtual void release();
+    
     // Analytics plugins
     ProtocolAnalytics* _pAnalytics;
 
@@ -145,6 +147,8 @@ protected:
 
     bool bIsAnaylticsEnabled;
 	// ProtocolIAP *pIAP;
+    
+    static AgentManager* s_agentManagerInstance;
 };
 } //namespace opensdk {
 #endif //__OPENSDK_AGENT_MANAGER_H__
