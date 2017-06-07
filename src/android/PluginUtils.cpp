@@ -68,12 +68,12 @@ jobject PluginUtils::createJavaListObject(std::list<std::string>* paramList)
     return obj_List;
 }
 
-void PluginUtils::initJavaPlugin(PluginProtocol* pPlugin, jobject jObj, const char* className)
+void PluginUtils::initJavaPlugin(PluginProtocol* pPlugin, jobject jObj, const char* className,int pluginTyp)
 {
 	opensdk::PluginJavaData* pUserData = new opensdk::PluginJavaData();
 	pUserData->jobj = PluginUtils::getEnv()->NewGlobalRef(jObj);
 	pUserData->jclassName = className;
-	opensdk::PluginUtils::setPluginJavaData(pPlugin, pUserData);
+	opensdk::PluginUtils::setPluginJavaData(pPlugin, pUserData,pluginTyp);
 }
 
 JNIEnv* PluginUtils::getEnv()
