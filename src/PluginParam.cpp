@@ -43,4 +43,4 @@ PluginParam::PluginParam(StringMap strMapValue)
     _type = kParamTypeStringMap;
 }
 
-} //namespace cocos2d { namespace plugin {
+} //namespace opensdk
