@@ -11,7 +11,7 @@ typedef struct
 {
     UserActionResultCode resultCode;
     std::string msg;
-    std::string className;
+    std::string pluginKey;
 } UserActionResult;
     
 class UserObject : public ProtocolUser
@@ -52,6 +52,8 @@ public:
     virtual void login();
     
     virtual void login(const std::string& server_id, const std::string& oauthLoginServer = "");
+    
+    virtual void login(std::map<std::string,std::string>& info);
 
     /**
      @brief User logout
@@ -111,17 +113,13 @@ public:
     static void pushActionResult(const UserActionResult& actionResult);
     
     
-public:
+protected:
     static std::vector<UserActionResult> _actionResultList;
     
-    
-    static std::string _serverID;
-    static std::string _serverIP;
-    
-protected:
-    std::string _pluginName;
-    
+    std::map<string,string> _loginInfo;
     UserActionListener* _listener;
+    std::string _pluginName;
+
 };
 
 } // namespace opensdk {

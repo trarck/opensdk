@@ -8,11 +8,11 @@ using namespace opensdk;
 
 extern "C" {
     
-    JNIEXPORT void JNICALL Java_com_opensdk_framework_UserWrapper_nativeOnActionResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg)
+    JNIEXPORT void JNICALL Java_com_opensdk_framework_UserWrapper_nativeOnActionResult(JNIEnv*  env, jobject thiz, jstring pluginKey, jint ret, jstring msg)
     {
         std::string strMsg = PluginJniHelper::jstring2string(msg);
-        std::string strClassName = PluginJniHelper::jstring2string(className);
-        PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
+        std::string strPluginKey = PluginJniHelper::jstring2string(pluginKey);
+        PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strPluginKey);
         PluginUtils::outputLog("ProtocolUser", "nativeOnActionResult(), Get plugin ptr : %p", pPlugin);
         UserObject* userObject = dynamic_cast<UserObject*>(pPlugin);
         if (userObject != NULL)
@@ -31,10 +31,10 @@ extern "C" {
                 UserActionResult result={
                     (UserActionResultCode)ret,
                     strMsg,
-                    strClassName
+                    strPluginKey
                 };
                 
-                UserObject::_actionResultList.push_back(result);
+                UserObject::pushActionResult(result);
                 
                 PluginUtils::outputLog("ProtocolUser","Listener of plugin %s not set correctly", pPlugin->getPluginName());
             }
@@ -44,10 +44,10 @@ extern "C" {
             UserActionResult result={
                 (UserActionResultCode)ret,
                 strMsg,
-                strClassName
+                strPluginKey
             };
             
-            UserObject::_actionResultList.push_back(result);
+            UserObject::pushActionResult(result);
             
             PluginUtils::outputLog("ProtocolUser", "plugin %s is null", pPlugin->getPluginName());
         }

@@ -57,13 +57,19 @@ void UserObject::login()
 void UserObject::login(const std::string& server_id, const std::string& oauthLoginServer)
 {
     if(!server_id.empty()){
-        _serverID=server_id;
+        _loginInfo["server_id"]=server_id;
     }
     
     if(!oauthLoginServer.empty()){
-        _serverIP=oauthLoginServer;
+        _loginInfo["server_url"]=oauthLoginServer;
     }
     
+    PluginUtils::callJavaFunctionWithName(this, "login");
+}
+
+virtual void login(std::map<std::string,std::string>& info)
+{
+    _loginInfo=info;
     PluginUtils::callJavaFunctionWithName(this, "login");
 }
 
@@ -120,8 +126,7 @@ std::string UserObject::getPluginId()
 void UserObject::popActionResult()
 {
     for(std::vector<UserActionResult>::iterator iter=_actionResultList.begin();iter!=_actionResultList.end();){
-        
-        UserObject* userObject = dynamic_cast<UserObject*>(PluginUtils::getPluginPtr(iter->className));
+        UserObject* userObject = dynamic_cast<UserObject*>(PluginUtils::getPluginPtr(iter->pluginKey));
         if(userObject){
             UserActionListener* listener = userObject->getActionListener();
             if(listener){

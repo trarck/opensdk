@@ -70,6 +70,7 @@ public:
     
     virtual void login(const std::string& server_id, const std::string& oauthLoginServer = "") = 0 ;
 
+    virtual  void login(std::map<std::string, std::string> info) = 0 ;
     /**
      @brief User logout
      */
@@ -105,14 +106,6 @@ public:
      @brief get login callback function
      */
     virtual UserActionListener* getActionListener() = 0 ;
-    
-    /**
-     @brief Check function the plugin support or not
-     @param the name of plugin
-     @return if the function support ,return true
-     else retur false
-     */
-    virtual bool isFunctionSupported(const std::string& functionName) = 0 ;
     
     /**
      @brief get plugin id
