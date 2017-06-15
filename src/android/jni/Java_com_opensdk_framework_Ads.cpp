@@ -7,10 +7,10 @@
 using namespace opensdk;
 
 extern "C" {
-    JNIEXPORT void JNICALL Java_com_opensdk_framework_AdsWrapper_nativeOnAdsResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg) {
+    JNIEXPORT void JNICALL Java_com_opensdk_framework_AdsWrapper_nativeOnAdsResult(JNIEnv*  env, jobject thiz, jstring pluginKey, jint ret, jstring msg) {
         std::string strMsg = PluginJniHelper::jstring2string(msg);
-        std::string strClassName = PluginJniHelper::jstring2string(className);
-        PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
+        std::string strPluginKey = PluginJniHelper::jstring2string(pluginKey);
+        PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strPluginKey);
         PluginUtils::outputLog("ProtocolAds", "nativeOnAdsResult(), Get plugin ptr : %p", pPlugin);
         AdsObject* pAds = dynamic_cast<AdsObject*>(pPlugin);
         if (pAds != NULL)
@@ -28,7 +28,7 @@ extern "C" {
                 AdsActionResult actionResult={
                     (AdsResultCode) ret,
                     strMsg,
-                    strClassName
+                    strPluginKey
                 };
                 
                 AdsObject::_actionResultList.push_back(actionResult);
@@ -40,32 +40,32 @@ extern "C" {
             AdsActionResult actionResult={
                 (AdsResultCode) ret,
                 strMsg,
-                strClassName
+                strPluginKey
             };
             
             AdsObject::_actionResultList.push_back(actionResult);
         }
     }
     
-    JNIEXPORT void JNICALL Java_com_opensdk_framework_AdsWrapper_nativeOnPlayerGetPoints(JNIEnv*  env, jobject thiz, jstring className, jint points) {
-        std::string strClassName = PluginJniHelper::jstring2string(className);
-        PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
-        PluginUtils::outputLog("ProtocolAds", "nativeOnPlayerGetPoints(), Get plugin ptr : %p", pPlugin);
-        if (pPlugin != NULL)
-        {
-            PluginUtils::outputLog("ProtocolAds", "nativeOnPlayerGetPoints(), Get plugin name : %s", pPlugin->getPluginName());
-            AdsObject* pAds = dynamic_cast<AdsObject*>(pPlugin);
-            if (pAds != NULL)
-            {
-                AdsListener* listener = pAds->getAdsListener();
-                if (listener)
-                {
-                    listener->onPlayerGetPoints(pAds, points);
-                }else{
-                	PluginUtils::outputLog("ProtocolAds", "Can't find nativeOnPlayerGetPoints() listener of plugin %s", pPlugin->getPluginName());
-                }
-            }
-        }
-    }
+    // JNIEXPORT void JNICALL Java_com_opensdk_framework_AdsWrapper_nativeOnPlayerGetPoints(JNIEnv*  env, jobject thiz, jstring pluginKey, jint points) {
+        // std::string strPluginKey = PluginJniHelper::jstring2string(pluginKey);
+        // PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strPluginKey);
+        // PluginUtils::outputLog("ProtocolAds", "nativeOnPlayerGetPoints(), Get plugin ptr : %p", pPlugin);
+        // if (pPlugin != NULL)
+        // {
+            // PluginUtils::outputLog("ProtocolAds", "nativeOnPlayerGetPoints(), Get plugin name : %s", pPlugin->getPluginName());
+            // AdsObject* pAds = dynamic_cast<AdsObject*>(pPlugin);
+            // if (pAds != NULL)
+            // {
+                // AdsListener* listener = pAds->getAdsListener();
+                // if (listener)
+                // {
+                    // listener->onPlayerGetPoints(pAds, points);
+                // }else{
+                	// PluginUtils::outputLog("ProtocolAds", "Can't find nativeOnPlayerGetPoints() listener of plugin %s", pPlugin->getPluginName());
+                // }
+            // }
+        // }
+    // }
     
 }

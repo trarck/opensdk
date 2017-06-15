@@ -12,7 +12,7 @@ typedef struct{
     
     AdsResultCode resultCode;
     std::string msg;
-    std::string className;
+    std::string pluginKey;
 } AdsActionResult;
     
 class AdsObject : public ProtocolAds

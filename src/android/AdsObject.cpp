@@ -122,7 +122,7 @@ void AdsObject::popActionResult()
 {
     for(std::vector<AdsActionResult>::iterator iter=_actionResultList.begin();iter!=_actionResultList.end();){
         
-        AdsObject* pAds = dynamic_cast<AdsObject*>(PluginUtils::getPluginPtr(iter->className));
+        AdsObject* pAds = dynamic_cast<AdsObject*>(PluginUtils::getPluginPtr(iter->pluginKey));
         if(pAds){
             AdsListener* listener = pAds->getAdsListener();
             if(listener){
