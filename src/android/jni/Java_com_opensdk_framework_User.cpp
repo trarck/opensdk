@@ -18,8 +18,6 @@ extern "C" {
         if (userObject != NULL)
         {
             PluginUtils::outputLog("ProtocolUser", "nativeOnActionResult(), Get plugin name : %s", pPlugin->getPluginName());
-            
-
 
             UserActionListener* listener = userObject->getActionListener();
             if (NULL != listener)
