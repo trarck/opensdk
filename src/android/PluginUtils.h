@@ -33,6 +33,7 @@ public:
 
     static jobject getJObjFromParam(PluginParam* param);
 
+    static std::string getPluginKey(std::string& className,int pluginType);
     // methods have no return value
     template <typename T>
     static void callJavaFunctionWithName_oneParam(PluginProtocol* thiz, const char* funcName, const char* paramCode, T param)

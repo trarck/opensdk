@@ -68,7 +68,7 @@ void IAPObject::payForProduct(TProductInfo info)
                 IAPActionResult result={
                     kPayFail,
                     "Product info error",
-                    pData->jclassName
+                    PluginUtils::getPluginKey(pData->jclassName,getPluginType())
                 };
                 
                 pushActionResult(result);

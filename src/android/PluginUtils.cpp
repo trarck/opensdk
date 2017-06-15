@@ -136,8 +136,7 @@ void PluginUtils::setPluginJavaData(PluginProtocol* pKeyObj, PluginJavaData* pDa
 {
     erasePluginJavaData(pKeyObj,pluginType);
     s_PluginObjMap.insert(std::pair<PluginProtocol*, PluginJavaData*>(pKeyObj, pData));
-    char key[PLUGIN_KEY_BUFF_SIZE]={0};
-    sprintf(key,"%s%d",pData->jclassName,pluginType);
+    std::string key=getPluginKey(pData->jclassName,pluginType);
     s_JObjPluginMap.insert(std::pair<std::string, PluginProtocol*>(key, pKeyObj));
 }
 
@@ -149,8 +148,7 @@ void PluginUtils::erasePluginJavaData(PluginProtocol* pKeyObj,int pluginType)
         if (pData != NULL)
         {
             jobject jobj = pData->jobj;
-            char key[PLUGIN_KEY_BUFF_SIZE]={0};
-            sprintf(key,"%s%d",pData->jclassName,pluginType);
+            std::string key=getPluginKey(pData->jclassName,pluginType);
             JObjPluginMapIter pluginIt = s_JObjPluginMap.find(key);
             if (pluginIt != s_JObjPluginMap.end())
             {
@@ -293,6 +291,13 @@ jobject PluginUtils::getJObjFromParam(PluginParam* param)
 	}
 
 	return obj;
+}
+
+std::string PluginUtils::getPluginKey(std::string& className,int pluginType)
+{
+    char key[PLUGIN_KEY_BUFF_SIZE]={0};
+    sprintf(key,"%s%d",pData->jclassName,pluginType);
+    return key;
 }
     
 void PluginUtils::callJavaFunctionWithName_map(PluginProtocol* thiz, const char* funcName, std::map<std::string, std::string>* paramMap)
