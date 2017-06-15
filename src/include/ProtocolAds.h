@@ -20,10 +20,13 @@ typedef enum
     kPointsSpendSucceed,        // The points spend succeed
     kPointsSpendFailed,         // The points spend failed
 
-    kNetworkError,              // Network error
-    kUnknownError,              // Unknown error
-	
-	kOfferWallOnPointsChanged, 
+        kNetworkError,              /**< enum the callback of Network error at center. */
+    kUnknownError,              /**< enum the callback of Unknown error. */
+    kOfferWallOnPointsChanged,   /**< enum the callback of Changing the point of offerwall. */
+    kRewardedVideoWithReward,/**< enum the callback of receiving the reward of rewardedvideo. */
+    kInAppPurchaseFinished,/**< enum the callback of finishing IAP ad. */
+    kAdsClicked,/**< enum the callback of the advertisement clicked. */
+    kAdsExtension = 40000 /**< enum value is  extension code . */
 } AdsResultCode;
 
 typedef enum {
@@ -41,6 +44,9 @@ typedef enum {
 	AD_TYPE_FULLSCREEN,/**< enum value is fullscreen ads . */
 	AD_TYPE_MOREAPP,/**< enum value is moreapp ads . */
 	AD_TYPE_OFFERWALL,/**< enum value is offerwall ads . */
+	AD_TYPE_REWARDEDVIDEO,/**< enum value is rewarded video ads . */
+	AD_TYPE_NATIVEEXPRESS,/**< enum value is Native express  ads . */
+	AD_TYPE_NATIVEADVANCED,/**< enum value is Native advanced  ads . */
 } AdsType;
 
 class ProtocolAds;
@@ -52,13 +58,6 @@ public:
     @brief The advertisement request result
     */
     virtual void onAdsResult(AdsResultCode code, const char* msg) = 0;
-    
-    /**
-    @brief Player get points from advertisement(For example: Tapjoy)
-    @param points The point number player has got.
-    @param pAdsPlugin  The plugin which the player get points. Used to spend the points.
-    */
-    virtual void onPlayerGetPoints(ProtocolAds* pAdsPlugin, int points) {}
 };
 
 class ProtocolAds : public PluginProtocol
