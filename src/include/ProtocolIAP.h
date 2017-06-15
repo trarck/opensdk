@@ -10,7 +10,7 @@ namespace opensdk {
 typedef std::map<std::string, std::string> TIAPDeveloperInfo;
 typedef std::map<std::string, std::string> TProductInfo;
 typedef std::vector<TProductInfo> TProductList;
-//typedef std::map<std::string, TProductInfo> AllProductsInfo;
+typedef std::map<std::string, TProductInfo> AllProductsInfo;
 
 typedef enum 
 {
@@ -23,6 +23,7 @@ typedef enum
 	kPayInitFail,/**< enum value is callback of failing to init sdk . */
 	kPayNowPaying,/**< enum value is callback of paying now . */
 	kPayRechargeSuccess,/**< enum value is callback of  succeeding in recharging. */
+    kPayExtension = 30000
 } PayResultCode;
     
 typedef enum {
@@ -73,13 +74,13 @@ public:
     @param pListener The callback object for pay result
     @wraning Must invoke this interface before payForProduct.
     */
-    virtual void setResultListener(PayResultListener* pListener) = 0;
+    virtual void setPayResultListener(PayResultListener* pListener) = 0;
     
     /**
     @deprecated
     @breif get the result listener
     */
-    virtual PayResultListener* getResultListener() = 0;
+    virtual PayResultListener* getPayResultListener() = 0;
 	
    /**
     @brief get plugin id
