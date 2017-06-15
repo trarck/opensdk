@@ -12,7 +12,7 @@ typedef struct
 {
 	PayResultCode resultCode;
 	std::string msg;
-    std::string className;
+    std::string pluginKey;
     
 } IAPActionResult;
 
@@ -71,13 +71,13 @@ public:
     @param pListener The callback object for pay result
     @wraning Must invoke this interface before payForProduct.
     */
-    virtual void setResultListener(PayResultListener* pListener);
+    virtual void setPayResultListener(PayResultListener* pListener);
     
     /**
     @deprecated
     @breif get the result listener
     */
-    virtual PayResultListener* getResultListener();
+    virtual PayResultListener* getPayResultListener();
 	
    /**
     @brief get plugin id

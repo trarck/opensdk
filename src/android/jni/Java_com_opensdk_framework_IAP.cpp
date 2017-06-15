@@ -8,11 +8,11 @@ using namespace opensdk;
 
 extern "C" {
     
-    JNIEXPORT void JNICALL Java_com_opensdk_framework_IAPWrapper_nativeOnPayResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg)
+    JNIEXPORT void JNICALL Java_com_opensdk_framework_IAPWrapper_nativeOnPayResult(JNIEnv*  env, jobject thiz, jstring pluginKey, jint ret, jstring msg)
     {
         std::string strMsg = PluginJniHelper::jstring2string(msg);
-        std::string strClassName = PluginJniHelper::jstring2string(className);
-        PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
+        std::string strPluginKey = PluginJniHelper::jstring2string(pluginKey);
+        PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strPluginKey);
         PluginUtils::outputLog("ProtocolIAP", "nativeOnPayResult(), Get plugin ptr : %p", pPlugin);
         IAPObject* iapObject = dynamic_cast<IAPObject*>(pPlugin);
         if (iapObject != NULL)
@@ -28,10 +28,10 @@ extern "C" {
                 IAPActionResult result={
                     (PayResultCode)ret,
                     strMsg,
-                    strClassName
+                    strPluginKey
                 };
                 
-                IAPObject::_actionResultList.push_back(result);
+                IAPObject::pushActionResult(result);
 
             	PluginUtils::outputLog("ProtocolIAP", "Can't find nativeOnPayResult listener of plugin %s", pPlugin->getPluginName());
             }
@@ -40,10 +40,10 @@ extern "C" {
             IAPActionResult result={
                 (PayResultCode)ret,
                 strMsg,
-                strClassName
+                strPluginKey
             };
             
-            IAPObject::_actionResultList.push_back(result);
+            IAPObject::pushActionResult(result);
             
             PluginUtils::outputLog("ProtocolIAP", "no plugin name : %s", pPlugin->getPluginName());
         }

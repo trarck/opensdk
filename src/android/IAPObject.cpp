@@ -71,7 +71,7 @@ void IAPObject::payForProduct(TProductInfo info)
                     pData->jclassName
                 };
                 
-                _actionResultList.push_back(result);
+                pushActionResult(result);
             }
         }
         PluginUtils::outputLog("IAPObject", "The product info is empty!");
@@ -91,13 +91,13 @@ std::string IAPObject::getOrderId()
 	return PluginUtils::callJavaStringFuncWithName(this,"getOrderId");
 }
 
-void IAPObject::setResultListener(PayResultListener* pListener)
+void IAPObject::setPayResultListener(PayResultListener* pListener)
 {
 	_listener = pListener;
     popActionResult();
 }
 
-PayResultListener* IAPObject::getResultListener()
+PayResultListener* IAPObject::getPayResultListener()
 {
 	return _listener;
 }
@@ -128,7 +128,7 @@ void IAPObject::popActionResult()
 {
     for(std::vector<IAPActionResult>::iterator iter=_actionResultList.begin();iter!=_actionResultList.end();){
         
-        IAPObject* iapObject = dynamic_cast<IAPObject*>(PluginUtils::getPluginPtr(iter->className));
+        IAPObject* iapObject = dynamic_cast<IAPObject*>(PluginUtils::getPluginPtr(iter->pluginKey));
         if(iapObject){
             PayResultListener* listener = iapObject->getResultListener();
             if(listener){
