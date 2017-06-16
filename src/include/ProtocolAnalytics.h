@@ -95,7 +95,6 @@ public:
      @warning This interface only worked on android.
      */
 	virtual void setCaptureUncaughtException(bool enabled) = 0;
-
 };
 
 } // namespace opensdk {

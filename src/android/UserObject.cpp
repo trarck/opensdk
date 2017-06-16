@@ -109,15 +109,6 @@ UserActionListener* UserObject::getActionListener()
     return _listener;
 }
 
-bool UserObject::isFunctionSupported(const std::string& functionName)
-{
-    jstring jstr = PluginUtils::getEnv()->NewStringUTF(functionName.c_str());
-    bool ret=PluginUtils::callJavaBoolFuncWithName_oneParam(this, "isFunctionSupported", "(Ljava/lang/String;)V", jstr);
-    PluginUtils::getEnv()->DeleteLocalRef(jstr);
-    
-    return ret;
-}
-
 std::string UserObject::getPluginId()
 {
     return PluginUtils::callJavaStringFuncWithName(this, "getPluginId");

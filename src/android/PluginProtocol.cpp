@@ -164,4 +164,9 @@ float PluginProtocol::callFloatFuncWithParam(const char* funcName, std::vector<P
     CALL_JAVA_FUNC(float, Float, 0.0f, "F")
 }
 
+bool PluginProtocol::isFunctionSupported(std::string functionName)
+{
+    PluginParam paramFunctionName(functionName.c_str());
+    return callBoolFuncWithParam("isFunctionSupported", &paramFunctionName,NULL);
+}
 } //namespace opensdk {

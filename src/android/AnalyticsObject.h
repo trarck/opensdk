@@ -83,8 +83,6 @@ public:
      */
 	virtual void setCaptureUncaughtException(bool enabled);
 	
-	virtual bool isFunctionSupported(const std::string& functionName);
-	
 private:
 
     std::string _pluginName;

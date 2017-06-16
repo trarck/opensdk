@@ -90,15 +90,7 @@ public:
      @brief get login callback function
      */
     virtual UserActionListener* getActionListener();
-    
-    /**
-     @brief Check function the plugin support or not
-     @param the name of plugin
-     @return if the function support ,return true
-     else retur false
-     */
-    virtual bool isFunctionSupported(const std::string& functionName);
-    
+        
     /**
      @brief get plugin id
      @return the plugin id
