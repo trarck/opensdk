@@ -16,6 +16,7 @@ typedef enum
     kShareFail,
     kShareCancel,
     kShareTimeOut,
+    kShareExtension = 10000 
 } ShareResultCode;
 
 class ShareResultListener

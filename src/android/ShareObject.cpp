@@ -60,10 +60,10 @@ void ShareObject::share(TShareInfo info)
                 ShareActionResult result={
                     kShareFail,
                     "Share info error",
-                    pData->jclassName
+                    PluginUtils::getPluginKey(pData->jclassName,getPluginType())
                 };
                 
-                _actionResultList.push_back(result);
+                pushActionResult(result);
             }
 
         }
@@ -106,7 +106,7 @@ void ShareObject::popActionResult()
 {
     for(std::vector<ShareActionResult>::iterator iter=_actionResultList.begin();iter!=_actionResultList.end();){
         
-        ShareObject* shareObject = dynamic_cast<ShareObject*>(PluginUtils::getPluginPtr(iter->className));
+        ShareObject* shareObject = dynamic_cast<ShareObject*>(PluginUtils::getPluginPtr(iter->pluginKey));
         if(shareObject){
             ShareResultListener* listener = shareObject->getResultListener();
             if(listener){

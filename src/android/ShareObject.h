@@ -11,7 +11,7 @@ typedef struct
 {
     ShareResultCode resultCode;
     std::string msg;
-    std::string className;
+    std::string pluginKey;
     
 } ShareActionResult;
 
