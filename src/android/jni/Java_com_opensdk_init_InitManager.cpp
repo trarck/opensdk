@@ -9,7 +9,7 @@ using namespace opensdk;
 
 extern "C" {
     
-    JNIEXPORT void JNICALL Java_com_opensdk_init_InitManager_nativeInitPlugins(JNIEnv*  env, jobject thiz)
+    JNIEXPORT void JNICALL Java_com_opensdk_framework_NativeInvoker_nativeInitPlugins(JNIEnv*  env, jobject thiz)
     {
 		InitManager::getInstance()->onInitPlugins();
     }

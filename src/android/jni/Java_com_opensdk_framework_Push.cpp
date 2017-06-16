@@ -8,7 +8,7 @@ using namespace opensdk;
 
 extern "C" {
     
-    JNIEXPORT void JNICALL Java_com_opensdk_framework_PushWrapper_nativeOnActionResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg)
+    JNIEXPORT void JNICALL Java_com_opensdk_framework_NativeInvoker_nativeOnActionResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg)
     {
         std::string strMsg = PluginJniHelper::jstring2string(msg);
         std::string strClassName = PluginJniHelper::jstring2string(className);

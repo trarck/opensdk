@@ -8,7 +8,7 @@ using namespace opensdk;
 
 extern "C" {
     
-    JNIEXPORT void JNICALL Java_com_opensdk_framework_IAPWrapper_nativeOnPayResult(JNIEnv*  env, jobject thiz, jstring pluginKey, jint ret, jstring msg)
+    JNIEXPORT void JNICALL Java_com_opensdk_framework_NativeInvoker_nativeOnPayResult(JNIEnv*  env, jobject thiz, jstring pluginKey, jint ret, jstring msg)
     {
         std::string strMsg = PluginJniHelper::jstring2string(msg);
         std::string strPluginKey = PluginJniHelper::jstring2string(pluginKey);

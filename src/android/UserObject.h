@@ -97,7 +97,10 @@ public:
      */
     virtual std::string getPluginId();
 
-    
+    std::map<std::string,std::string> getLoginInfo()
+    {
+        return _loginInfo;
+    }
 public:
     
     static void popActionResult();
