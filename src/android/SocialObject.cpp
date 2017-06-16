@@ -130,7 +130,7 @@ void SocialObject::popActionResult()
 {
     for(std::vector<SocialActionResult>::iterator iter=_actionResultList.begin();iter!=_actionResultList.end();){
         
-        SocialObject* socialObject = dynamic_cast<SocialObject*>(PluginUtils::getPluginPtr(iter->className));
+        SocialObject* socialObject = dynamic_cast<SocialObject*>(PluginUtils::getPluginPtr(iter->pluginKey));
         if(socialObject){
             SocialListener* listener = socialObject->getListener();
             if(listener){

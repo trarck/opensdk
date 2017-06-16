@@ -11,7 +11,7 @@ typedef struct
 {
     SocialRetCode resultCode;
     std::string msg;
-    std::string className;
+    std::string pluginKey;
     
 } SocialActionResult;
     

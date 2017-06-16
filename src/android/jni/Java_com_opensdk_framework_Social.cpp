@@ -7,17 +7,16 @@
 using namespace opensdk;
 
 extern "C" {
-    JNIEXPORT void JNICALL Java_com_opensdk_framework_SocialWrapper_nativeOnSocialResult(JNIEnv*  env, jobject thiz, jstring className, jint ret, jstring msg)
+    JNIEXPORT void JNICALL Java_com_opensdk_framework_SocialWrapper_nativeOnSocialResult(JNIEnv*  env, jobject thiz, jstring pluginKey, jint ret, jstring msg)
     {
         std::string strMsg = PluginJniHelper::jstring2string(msg);
-        std::string strClassName = PluginJniHelper::jstring2string(className);
-        PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strClassName);
+        std::string strPluginKey = PluginJniHelper::jstring2string(pluginKey);
+        PluginProtocol* pPlugin = PluginUtils::getPluginPtr(strPluginKey);
         PluginUtils::outputLog("ProtocolSocial", "nativeOnSocialResult(), Get plugin ptr : %p", pPlugin);
         SocialObject* socialObject = dynamic_cast<SocialObject*>(pPlugin);
         if (socialObject != NULL)
         {
-            PluginUtils::outputLog("ProtocolSocial", "nativeOnSocialResult(), Get plugin name : %s", pPlugin->getPluginName());
-            
+            PluginUtils::outputLog("ProtocolSocial", "nativeOnSocialResult(), Get plugin name : %s", pPlugin->getPluginName());            
     
             SocialListener* pListener = socialObject->getListener();
             if (NULL != pListener)
@@ -29,10 +28,10 @@ extern "C" {
                 SocialActionResult result={
                     (SocialRetCode)ret,
                     strMsg,
-                    strClassName
+                    strPluginKey
                 };
                 
-                SocialObject::_actionResultList.push_back(result);
+                SocialObject::pushActionResult(result);
                 PluginUtils::outputLog("ProtocolSocial", "Can't find the nativeOnSocialResult listener of plugin %s", pPlugin->getPluginName());
             }
 
@@ -41,10 +40,10 @@ extern "C" {
             SocialActionResult result={
                 (SocialRetCode)ret,
                 strMsg,
-                strClassName
+                strPluginKey
             };
             
-            SocialObject::_actionResultList.push_back(result);
+            SocialObject::pushActionResult(result);
             
             PluginUtils::outputLog("ProtocolSocial", "plugin %s is null", pPlugin->getPluginName());
         }
